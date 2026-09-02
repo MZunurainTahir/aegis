@@ -1,0 +1,14 @@
+alpaca-py>=0.44.0
+alpaca-mcp-server>=2.3.0
+fastmcp>=3.4.7
+fastapi>=0.115.0
+uvicorn>=0.30.0
+pydantic>=2.9.0
+requests>=2.32.0
+python-dotenv>=1.0.1
+scipy>=1.13.0
+numpy>=1.26.0
+pandas>=2.2.0
+groq>=0.11.0
+elevenlabs>=1.50.0
+supabase>=2.0.0

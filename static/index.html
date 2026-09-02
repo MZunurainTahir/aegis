@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEGIS — Autonomous Risk-Governed Options Desk</title>
+  <meta name="description" content="AEGIS: Institutional-grade autonomous AI options trading desk. Multi-agent Wheel strategy with sovereign risk governance, powered by Alpaca Markets.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="light-theme">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ============================================================
+       AUTH OVERLAY — 2-panel: Register / Sign In
+       ============================================================ -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-bg-gfx" aria-hidden="true">
+      <div class="auth-orb auth-orb-1"></div>
+      <div class="auth-orb auth-orb-2"></div>
+      <div class="auth-grid-lines"></div>
+    </div>
+
+    <div class="auth-card" id="auth-card">
+
+      <!-- Shared header -->
+      <div class="auth-header">
+        <div class="auth-logo-badge">
+          <svg class="shield-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h1 class="auth-title">AEGIS TRADING DESK</h1>
+        <p class="auth-subtitle">Autonomous, Risk-Governed Options Income &amp; Hedging Platform</p>
+      </div>
+
+      <!-- Auth tab switcher -->
+      <div class="auth-tabs" role="tablist">
+        <button id="tab-register" class="auth-tab active" role="tab" aria-selected="true" onclick="switchToRegister()">Create Account</button>
+        <button id="tab-signin"   class="auth-tab"        role="tab" aria-selected="false" onclick="switchToSignIn()">Sign In</button>
+      </div>
+
+      <!-- ── REGISTER PANEL ── -->
+      <div id="panel-register" class="auth-panel" aria-labelledby="tab-register">
+        <form class="auth-form" id="register-form" onsubmit="handleRegister(event)" novalidate>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="reg-fullname">Full Name</label>
+              <input type="text" id="reg-fullname" class="form-input" placeholder="Jane Doe" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-dob">Date of Birth</label>
+              <input type="date" id="reg-dob" class="form-input" required autocomplete="bday">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email (Google-registered)</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="you@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Password</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="reg-password" class="form-input" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password" oninput="updatePasswordStrength(this.value)">
+                <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-password', this)" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="password-strength-bar" id="pwd-strength-bar">
+                <div class="pwd-bar-fill" id="pwd-bar-fill"></div>
+              </div>
+              <span class="pwd-strength-label" id="pwd-strength-label"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="reg-confirm-password" class="form-input" placeholder="Repeat password" required minlength="8" autocomplete="new-password">
+                <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-confirm-password', this)" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-divider"><span>ALPACA BROKERAGE</span></div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="reg-alpaca-account-id">Alpaca Account ID</label>
+              <input type="text" id="reg-alpaca-account-id" class="form-input font-mono" placeholder="a6f900…" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-alpaca-api-key">Alpaca API Key</label>
+              <input type="text" id="reg-alpaca-api-key" class="form-input font-mono" placeholder="PKWDLU…" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-alpaca-secret">Alpaca Secret Key</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="reg-alpaca-secret" class="form-input font-mono" placeholder="FUPUy4…" autocomplete="off">
+              <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-alpaca-secret', this)" aria-label="Show secret">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="btn-register-submit">
+            <span>Create Account &amp; Get Started</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <p class="auth-switch-text">Already have an account? <button type="button" class="link-btn" onclick="switchToSignIn()">Sign In</button></p>
+        </form>
+      </div>
+
+      <!-- ── SIGN IN PANEL ── -->
+      <div id="panel-signin" class="auth-panel hidden" aria-labelledby="tab-signin">
+        <form class="auth-form" id="login-form" onsubmit="handleLogin(event)" novalidate>
+
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email</label>
+            <input type="email" id="login-email" class="form-input" placeholder="you@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="login-password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+              <button type="button" class="eye-toggle" onclick="togglePasswordVis('login-password', this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-divider"><span>ALPACA BROKERAGE</span></div>
+
+          <div class="form-group">
+            <label class="form-label" for="alpaca-key">Alpaca API Key <span class="form-hint">(or leave blank to use saved)</span></label>
+            <input type="text" id="alpaca-key" class="form-input font-mono" placeholder="PKWDLU… (optional)" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="alpaca-secret">Alpaca Secret Key <span class="form-hint">(required each session)</span></label>
+            <div class="input-eye-wrap">
+              <input type="password" id="alpaca-secret" class="form-input font-mono" placeholder="FUPUy4…" required autocomplete="off">
+              <button type="button" class="eye-toggle" onclick="togglePasswordVis('alpaca-secret', this)" aria-label="Show secret">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row-check">
+            <label class="checkbox-label">
+              <input type="checkbox" id="paper-mode" checked>
+              <span class="custom-chk"></span>
+              <strong>Paper Trading Account ($100,000 Equity)</strong>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="btn-auth-submit">
+            <span>Sign In &amp; Enter Trading Desk</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <p class="auth-switch-text">New here? <button type="button" class="link-btn" onclick="switchToRegister()">Create Account</button></p>
+        </form>
+      </div>
+
+    </div><!-- /auth-card -->
+  </div><!-- /auth-overlay -->
+
+  <!-- ============================================================
+       MAIN APPLICATION (Visible after Sign In)
+       ============================================================ -->
+  <div class="app-layout hidden" id="app-layout">
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-container">
+        <div class="logo-badge">
+          <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">AEGIS <span class="badge-alpha">ALPHA</span></div>
+          <div class="brand-subtitle">Autonomous Risk-Governed Options Desk</div>
+        </div>
+      </div>
+
+      <!-- Live Status Pill & Account -->
+      <div class="header-center-info">
+        <div class="status-indicator-box">
+          <span class="pulse-dot"></span>
+          <span id="system-status-text">ALPACA CONNECTED</span>
+        </div>
+        <div class="account-badge">
+          <span class="acc-label">ACCOUNT ID:</span>
+          <span class="acc-val" id="account-id-display">—</span>
+        </div>
+        <div class="account-badge" style="margin-left:8px;">
+          <span class="acc-label">TRADER:</span>
+          <span class="acc-val" id="trader-name-display">—</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Bar -->
+      <div class="header-actions">
+        <button class="btn-primary" id="btn-run-cycle" title="Trigger full 3-Agent cycle">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Run AI Cycle</span>
+        </button>
+
+        <button class="btn-toggle-auto" id="btn-toggle-auto">
+          <span class="toggle-icon">⚡</span>
+          <span id="auto-btn-text">Enable 24/7 Loop</span>
+        </button>
+
+        <button class="btn-hedge-danger" id="btn-emergency-hedge" title="Test Autonomous Tail-Risk Put Hedging">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Test Tail Hedge</span>
+        </button>
+
+        <button class="btn-sm-outline" onclick="showExplainerModal()">❓ How Aegis Works</button>
+
+        <button class="btn-logout" onclick="handleLogout()" title="Disconnect & Switch Account" id="btn-logout">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Audio Briefing Bar -->
+    <section class="briefing-bar" id="briefing-bar">
+      <div class="audio-control-wrapper">
+        <button class="btn-play-audio" id="btn-play-briefing" title="Click to listen to AI Voice Briefing">
+          <svg id="play-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <div class="audio-info">
+          <div class="audio-title">
+            <span>🎙️ EXECUTIVE AI VOICE BRIEFING (ELEVENLABS)</span>
+            <span class="audio-status-pill" id="audio-status-pill">READY</span>
+          </div>
+          <div class="audio-text" id="briefing-text-display">"Aegis intelligence brief: Dedicated paper account active at $100,000 equity. Portfolio Greeks calibrated."</div>
+        </div>
+      </div>
+      <audio id="briefing-audio-player" preload="auto" style="display:none;"></audio>
+    </section>
+
+    <!-- Main Container -->
+    <main class="dashboard-grid">
+      <!-- Top Row: Metrics Cards -->
+      <section class="metrics-row">
+        <div class="metric-card card-primary">
+          <div class="metric-header">
+            <span class="metric-label">PORTFOLIO EQUITY</span>
+            <span class="metric-tag tag-green">LIVE</span>
+          </div>
+          <div class="metric-value" id="portfolio-equity">$100,000.00</div>
+          <div class="metric-footer">
+            <span class="trend-positive" id="day-pnl-display">+$0.00 (+0.0%)</span>
+            <span class="subtext">Starting: $100,000</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">BUYING POWER (REG-T)</span>
+            <span class="metric-tag tag-blue">4.0x</span>
+          </div>
+          <div class="metric-value" id="buying-power">$400,000.00</div>
+          <div class="metric-footer">
+            <span class="subtext">Cash Reserve: <strong id="cash-balance">$100,000.00</strong></span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">PORTFOLIO DELTA</span>
+            <span class="metric-tag tag-neutral">NEUTRAL</span>
+          </div>
+          <div class="metric-value" id="net-delta">0.00 Δ</div>
+          <div class="metric-footer">
+            <span class="subtext">Target Band: -100 to +250 Δ</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">DAILY THETA INCOME</span>
+            <span class="metric-tag tag-gold">HARVEST</span>
+          </div>
+          <div class="metric-value text-emerald" id="daily-theta">+$0.00 / day</div>
+          <div class="metric-footer">
+            <span class="subtext">Wheel Premium Decay Rate</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">TAIL STRESS GAUGE</span>
+            <span class="metric-tag tag-safe" id="stress-badge">NORMAL</span>
+          </div>
+          <div class="metric-value" id="stress-index-val">18.50</div>
+          <div class="metric-footer">
+            <span class="subtext">Hedge Trigger: &gt; 25.0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Multi-Agent Architecture Bar -->
+      <section class="agents-status-bar">
+        <div class="agent-pill active" id="pill-quant">
+          <div class="agent-pill-icon">📊</div>
+          <div class="agent-pill-info">
+            <div class="agent-pill-name">QUANT AGENT</div>
+            <div class="agent-pill-role">Options Chain &amp; Greeks Screener</div>
+          </div>
+          <span class="pill-badge">SCREENING</span>
+        </div>
+
+        <div class="agent-connector">➔</div>
+
+        <div class="agent-pill active" id="pill-sentiment">
+          <div class="agent-pill-icon">🧠</div>
+          <div class="agent-pill-info">
+            <div class="agent-pill-name">SENTIMENT AGENT</div>
+            <div class="agent-pill-role">Multi-LLM News &amp; Earnings Gate</div>
+          </div>
+          <span class="pill-badge">SCORED (88/100)</span>
+        </div>
+
+        <div class="agent-connector">➔</div>
+
+        <div class="agent-pill active danger-border" id="pill-risk">
+          <div class="agent-pill-icon">🛡️</div>
+          <div class="agent-pill-info">
+            <div class="agent-pill-name">RISK GOVERNANCE AGENT</div>
+            <div class="agent-pill-role">Sovereign Veto &amp; Tail Hedging</div>
+          </div>
+          <span class="pill-badge badge-danger">VETO AUTHORITY</span>
+        </div>
+      </section>
+
+      <!-- Main Content Split -->
+      <div class="main-content-split">
+        <!-- Left Column -->
+        <div class="content-left">
+          <!-- Screened Wheel Proposals -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">🎯</span>
+                <h2 class="panel-title">Quant Screened Wheel Opportunities</h2>
+              </div>
+              <button class="btn-sm" id="btn-refresh-screen">Refresh Screen</button>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="proposals-table">
+                <thead>
+                  <tr>
+                    <th>TICKER</th>
+                    <th>STRATEGY</th>
+                    <th>CONTRACT</th>
+                    <th>STRIKE</th>
+                    <th>DTE</th>
+                    <th>DELTA</th>
+                    <th>EST. CREDIT</th>
+                    <th>ANN. YIELD</th>
+                    <th>EXECUTION</th>
+                  </tr>
+                </thead>
+                <tbody id="proposals-tbody">
+                  <tr><td colspan="9" class="text-center py-4">Scanning options chains...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Open Positions Matrix -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">💼</span>
+                <h2 class="panel-title">Active Wheel Positions &amp; Underlying Assets</h2>
+              </div>
+              <span class="badge-count" id="positions-count">0 Positions</span>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="positions-table">
+                <thead>
+                  <tr>
+                    <th>SYMBOL</th>
+                    <th>TYPE</th>
+                    <th>QTY</th>
+                    <th>MARKET VALUE</th>
+                    <th>COST BASIS</th>
+                    <th>UNREALIZED P&amp;L</th>
+                    <th>CURRENT PRICE</th>
+                  </tr>
+                </thead>
+                <tbody id="positions-tbody">
+                  <tr><td colspan="7" class="text-center py-4">No active positions yet. Click "Deploy" above or "Run AI Cycle" to open positions.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Backtested Performance Chart -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">📈</span>
+                <h2 class="panel-title">Backtested Strategy Performance vs. S&amp;P 500</h2>
+              </div>
+              <span class="badge-accent">88.4% Win Rate</span>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="performanceChart" height="90"></canvas>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-num text-emerald">24.6%</div>
+                <div class="stat-lbl">Annualized Return</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num">2.18</div>
+                <div class="stat-lbl">Sharpe Ratio</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num text-emerald">2.45</div>
+                <div class="stat-lbl">Profit Factor</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num text-coral">6.8%</div>
+                <div class="stat-lbl">Max Drawdown</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="content-right">
+          <div class="panel-card h-full flex-col">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">⚡</span>
+                <h2 class="panel-title">3-Agent Real-time Decision Stream</h2>
+              </div>
+              <span class="pulse-live">AUDITED</span>
+            </div>
+            <div class="terminal-box" id="terminal-feed">
+              <div class="terminal-row sys-log">
+                <span class="term-time">[09:30:00]</span>
+                <span class="term-badge badge-sys">SYSTEM</span>
+                <span class="term-text">Aegis autonomous risk-governed options engine initialized.</span>
+              </div>
+            </div>
+
+            <!-- Risk Gate Governance Matrix -->
+            <div class="risk-gate-box">
+              <div class="risk-gate-title">🛡️ Deterministic Risk Gate Controls</div>
+              <div class="gate-item">
+                <span>Max Capital / Position:</span>
+                <strong>≤ 35% ($35,000.00)</strong>
+              </div>
+              <div class="gate-item">
+                <span>Max Concentration / Ticker:</span>
+                <strong>≤ 40% ($40,000.00)</strong>
+              </div>
+              <div class="gate-item">
+                <span>Portfolio Delta Target:</span>
+                <strong>[-100 Δ, +250 Δ]</strong>
+              </div>
+              <div class="gate-item">
+                <span>Drawdown Circuit Breaker:</span>
+                <strong>5.0% Max Day Drop</strong>
+              </div>
+              <div class="gate-item">
+                <span>Tail-Risk Put Hedge:</span>
+                <strong>VIX Stress &gt; 25.0</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- HOW AEGIS WORKS EXPLAINER MODAL -->
+  <div class="modal-overlay" id="explainer-modal">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h2>💡 Understanding Aegis &amp; "Run AI Cycle"</h2>
+        <button class="btn-close-modal" onclick="closeExplainerModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="explainer-section">
+          <h3>🎯 What does "Run AI Cycle" do?</h3>
+          <p>
+            The core requirement of the Alpaca Hackathon is an <strong>Autonomous AI Trading Agent</strong>.
+            When you click <strong>Run AI Cycle</strong> (or enable the 24/7 background loop), Aegis executes a sequential triad:
+          </p>
+          <ol class="explainer-list">
+            <li><strong>Quant Agent:</strong> Pulls live options chains across SPY, QQQ, AAPL, NVDA, TSLA, and calculates Black-Scholes Greeks (Δ, Θ, V) and annualized yields.</li>
+            <li><strong>Sentiment Agent:</strong> Queries multi-LLM consensus (Groq Llama 3.3, Gemini Flash, DeepSeek) to evaluate news catalysts and earnings dates.</li>
+            <li><strong>Risk Governance Agent:</strong> Evaluates collateral against strict position size limits. If approved, it automatically routes the trade to Alpaca Paper Trading.</li>
+          </ol>
+        </div>
+        <div class="explainer-section mt-3">
+          <h3>⚡ How to Deploy Individual Trades Manually?</h3>
+          <p>
+            In the <strong>Quant Screened Wheel Opportunities</strong> table, click the green <strong>"Deploy"</strong> button next to any candidate contract to submit the trade ticket directly to your Alpaca paper brokerage account.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

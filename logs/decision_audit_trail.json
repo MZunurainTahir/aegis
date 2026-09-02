@@ -1,0 +1,819 @@
+[
+  {
+    "timestamp": "06:25:12",
+    "stage": "INITIATION",
+    "agent": "Orchestrator",
+    "message": "Starting Aegis autonomous multi-agent options cycle...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:25:15",
+    "stage": "ACCOUNT_AUDIT",
+    "agent": "AlpacaBroker",
+    "message": "Account active. Equity: $100,000.00 | Buying Power: $400,000.00 | Net Delta: 0.0 | Daily Theta: $0.0",
+    "details": {}
+  },
+  {
+    "timestamp": "06:25:15",
+    "stage": "SCREENING",
+    "agent": "QuantAgent",
+    "message": "Scanning blue-chip options chains for high-probability Wheel candidates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:28",
+    "stage": "PROPOSALS_GENERATED",
+    "agent": "QuantAgent",
+    "message": "Generated 7 candidate options trade tickets based on IV rank and delta targeting.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:28",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for TSLA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:36",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "TSLA Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:36",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting TSLA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:38",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED TSLA CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "TSLA faces elevated downside risk amid macro headwinds and potential earnings volatility. The stock's recent underperformance and high beta increase the likelihood of a sharp move."
+    }
+  },
+  {
+    "timestamp": "06:26:38",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for MSFT (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:44",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "MSFT Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:44",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting MSFT CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:46",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED MSFT CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($49,000.00) exceeds 10% position limit ($10,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "06:26:46",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for NVDA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:52",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "NVDA Conviction Score: 65/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:52",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting NVDA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:53",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED NVDA CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "NVDA faces elevated downside risk ahead of earnings (May 22) with macro headwinds (AI spending slowdown, regulatory scrutiny) and technical resistance at $220. The proposed $205 CSP offers 6.3% downside cushion but may not compensate for event-driven volatility."
+    }
+  },
+  {
+    "timestamp": "06:26:53",
+    "stage": "HEDGE_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Running independent tail-risk stress check...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:54",
+    "stage": "HEDGE_NORMAL",
+    "agent": "RiskGovernanceAgent",
+    "message": "Market stress index is normal (18.5 < 25.0 threshold). No tail hedge required.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:26:58",
+    "stage": "CYCLE_COMPLETE",
+    "agent": "Orchestrator",
+    "message": "Cycle completed successfully. All logs committed to audit trail.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:31:21",
+    "stage": "INITIATION",
+    "agent": "Orchestrator",
+    "message": "Starting Aegis autonomous multi-agent options cycle...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:31:23",
+    "stage": "ACCOUNT_AUDIT",
+    "agent": "AlpacaBroker",
+    "message": "Account active. Equity: $100,000.00 | Buying Power: $400,000.00 | Net Delta: 0.0 | Daily Theta: $0.0",
+    "details": {}
+  },
+  {
+    "timestamp": "06:31:23",
+    "stage": "SCREENING",
+    "agent": "QuantAgent",
+    "message": "Scanning blue-chip options chains for high-probability Wheel candidates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:32:36",
+    "stage": "PROPOSALS_GENERATED",
+    "agent": "QuantAgent",
+    "message": "Generated 7 candidate options trade tickets based on IV rank and delta targeting.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:32:36",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for TSLA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:32:54",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "TSLA Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:32:54",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting TSLA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:32:58",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED TSLA CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "TSLA faces elevated downside risk amid macro headwinds and potential earnings volatility. The EV sector is under pressure from rising interest rates and demand concerns."
+    }
+  },
+  {
+    "timestamp": "06:32:58",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for MSFT (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:17",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "MSFT Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:17",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting MSFT CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:18",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED MSFT CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($49,000.00) exceeds 10% position limit ($10,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "06:33:18",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for NVDA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:33",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "NVDA Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:33",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting NVDA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:34",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED NVDA CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($20,500.00) exceeds 10% position limit ($10,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "06:33:34",
+    "stage": "HEDGE_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Running independent tail-risk stress check...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:35",
+    "stage": "HEDGE_NORMAL",
+    "agent": "RiskGovernanceAgent",
+    "message": "Market stress index is normal (18.5 < 25.0 threshold). No tail hedge required.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:33:38",
+    "stage": "CYCLE_COMPLETE",
+    "agent": "Orchestrator",
+    "message": "Cycle completed successfully. All logs committed to audit trail.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:40:19",
+    "stage": "INITIATION",
+    "agent": "Orchestrator",
+    "message": "Starting Aegis autonomous multi-agent options cycle...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:40:37",
+    "stage": "ACCOUNT_AUDIT",
+    "agent": "AlpacaBroker",
+    "message": "Account active. Equity: $100,000.00 | Buying Power: $400,000.00 | Net Delta: 0.0 | Daily Theta: $0.0",
+    "details": {}
+  },
+  {
+    "timestamp": "06:40:37",
+    "stage": "SCREENING",
+    "agent": "QuantAgent",
+    "message": "Scanning blue-chip options chains for high-probability Wheel candidates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:42:42",
+    "stage": "PROPOSALS_GENERATED",
+    "agent": "QuantAgent",
+    "message": "Generated 11 candidate options trade tickets based on IV rank and delta targeting.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:42:42",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for INTC (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:42:55",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "INTC Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:42:55",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting INTC CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:42:58",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED INTC CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "INTC faces elevated downside risk amid weak PC demand and geopolitical concerns. The proposed $82.5 strike is 8.3% below spot, compounding earnings volatility."
+    }
+  },
+  {
+    "timestamp": "06:42:58",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for AMD (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:20",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "AMD Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:20",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting AMD CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:21",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED AMD CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($43,000.00) exceeds 10% position limit ($35,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "06:43:21",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for TSLA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:35",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "TSLA Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:35",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting TSLA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:36",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED TSLA CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "Tesla faces elevated downside risk due to macro headwinds (EV demand slowdown, rate sensitivity) and upcoming earnings (Apr 17). Spot is near key support, but premium may not compensate for event risk."
+    }
+  },
+  {
+    "timestamp": "06:43:36",
+    "stage": "HEDGE_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Running independent tail-risk stress check...",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:37",
+    "stage": "HEDGE_NORMAL",
+    "agent": "RiskGovernanceAgent",
+    "message": "Market stress index is normal (18.5 < 25.0 threshold). No tail hedge required.",
+    "details": {}
+  },
+  {
+    "timestamp": "06:43:41",
+    "stage": "CYCLE_COMPLETE",
+    "agent": "Orchestrator",
+    "message": "Cycle completed successfully. All logs committed to audit trail.",
+    "details": {}
+  },
+  {
+    "timestamp": "07:01:04",
+    "stage": "INITIATION",
+    "agent": "Orchestrator",
+    "message": "Starting Aegis autonomous multi-agent options cycle...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:01:05",
+    "stage": "ACCOUNT_AUDIT",
+    "agent": "AlpacaBroker",
+    "message": "Account active. Equity: $100,000.00 | Buying Power: $400,000.00 | Net Delta: 0.0 | Daily Theta: $0.0",
+    "details": {}
+  },
+  {
+    "timestamp": "07:01:05",
+    "stage": "SCREENING",
+    "agent": "QuantAgent",
+    "message": "Scanning blue-chip options chains for high-probability Wheel candidates...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:13",
+    "stage": "PROPOSALS_GENERATED",
+    "agent": "QuantAgent",
+    "message": "Generated 11 candidate options trade tickets based on IV rank and delta targeting.",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:13",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for INTC (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:27",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "INTC Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:27",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting INTC CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:30",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED INTC CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "INTC faces elevated downside risk amid weak PC demand and competitive pressures in semiconductors. The proposed $82.5 strike (8.3% OTM) may not adequately compensate for earnings volatility or macro headwinds."
+    }
+  },
+  {
+    "timestamp": "07:03:30",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for AMD (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:44",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "AMD Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:44",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting AMD CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:45",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED AMD CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($43,000.00) exceeds 10% position limit ($35,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "07:03:45",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for TSLA (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:59",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "TSLA Conviction Score: 45/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "07:03:59",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting TSLA CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:04:01",
+    "stage": "RISK_APPROVED",
+    "agent": "RiskGovernanceAgent",
+    "message": "APPROVED TSLA CASH_SECURED_PUT @ $345.0 strike. Risk gates cleared.",
+    "details": {
+      "verdict": "APPROVED",
+      "passed_checks": [
+        "Max 10% Position Size Check Passed",
+        "Max 20% Ticker Concentration Check Passed",
+        "Cash Collateral Verification Passed",
+        "Sentiment & Catalyst Risk Check Passed",
+        "Drawdown Circuit Breaker Normal"
+      ],
+      "portfolio_delta_post_trade": -28.9,
+      "estimated_theta_boost": 19.21
+    }
+  },
+  {
+    "timestamp": "07:04:01",
+    "stage": "EXECUTION_COMPLETED",
+    "agent": "ExecutionEngine",
+    "message": "Order submitted to Alpaca Paper Trading: SELL 1x TSLA261016P00345000",
+    "details": {
+      "success": true,
+      "order_id": "8cbfb264-2198-4759-ab53-cdc866ddb302",
+      "symbol": "TSLA261016P00345000",
+      "qty": 1,
+      "side": "sell",
+      "status": "OrderStatus.ACCEPTED",
+      "submitted_at": "2026-09-01 07:04:01.418439+00:00"
+    }
+  },
+  {
+    "timestamp": "07:04:01",
+    "stage": "HEDGE_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Running independent tail-risk stress check...",
+    "details": {}
+  },
+  {
+    "timestamp": "07:04:02",
+    "stage": "HEDGE_NORMAL",
+    "agent": "RiskGovernanceAgent",
+    "message": "Market stress index is normal (18.5 < 25.0 threshold). No tail hedge required.",
+    "details": {}
+  },
+  {
+    "timestamp": "07:04:06",
+    "stage": "CYCLE_COMPLETE",
+    "agent": "Orchestrator",
+    "message": "Cycle completed successfully. All logs committed to audit trail.",
+    "details": {}
+  },
+  {
+    "timestamp": "07:04:14",
+    "stage": "EXECUTION_MANUAL",
+    "agent": "Operator",
+    "message": "Manual order executed: SELL 1x INTC261016P00082500",
+    "details": {
+      "success": true,
+      "order_id": "4fdb8389-e5bc-47a0-8f4f-d5f3a59cc26d",
+      "symbol": "INTC261016P00082500",
+      "qty": 1,
+      "side": "sell",
+      "status": "OrderStatus.ACCEPTED",
+      "submitted_at": "2026-09-01 07:04:14.805220+00:00"
+    }
+  },
+  {
+    "timestamp": "07:15:04",
+    "stage": "EXECUTION_MANUAL",
+    "agent": "Operator",
+    "message": "Manual order executed: SELL 1x AAPL261016P00305000",
+    "details": {
+      "success": true,
+      "order_id": "mock_ord_1788246904",
+      "symbol": "AAPL261016P00305000",
+      "qty": 1,
+      "side": "sell",
+      "status": "submitted_paper",
+      "submitted_at": "2026-09-01T07:15:04.522858+00:00",
+      "note": "Order logged: {\"code\":40310000,\"message\":\"insufficient options buying power for cash-secured put (required: 29940.01, available: 15989.98)\",\"options_buying_power\":\"15989.98\",\"required_options_buying_power\":\"29940.01\"}"
+    }
+  },
+  {
+    "timestamp": "07:15:28",
+    "stage": "EXECUTION_MANUAL",
+    "agent": "Operator",
+    "message": "Manual order executed: SELL 1x QQQ261016P00696000",
+    "details": {
+      "success": true,
+      "order_id": "mock_ord_1788246928",
+      "symbol": "QQQ261016P00696000",
+      "qty": 1,
+      "side": "sell",
+      "status": "submitted_paper",
+      "submitted_at": "2026-09-01T07:15:28.508610+00:00",
+      "note": "Order logged: {\"code\":40310000,\"message\":\"insufficient options buying power for cash-secured put (required: 68601.01, available: 15989.98)\",\"options_buying_power\":\"15989.98\",\"required_options_buying_power\":\"68601.01\"}"
+    }
+  },
+  {
+    "timestamp": "08:37:47",
+    "stage": "AUTH_LOGIN",
+    "agent": "Authentication",
+    "message": "User trader@aegis-alpha.com connected to Alpaca Account ID a6f90060-9a9d-4ab6-949b-3238a0a40615",
+    "details": {}
+  },
+  {
+    "timestamp": "12:08:30",
+    "stage": "AUTH_LOGIN",
+    "agent": "Authentication",
+    "message": "User trader@aegis-alpha.com connected to Alpaca Account ID a6f90060-9a9d-4ab6-949b-3238a0a40615",
+    "details": {}
+  },
+  {
+    "timestamp": "12:11:26",
+    "stage": "INITIATION",
+    "agent": "Orchestrator",
+    "message": "Starting Aegis autonomous multi-agent options cycle...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:11:27",
+    "stage": "ACCOUNT_AUDIT",
+    "agent": "AlpacaBroker",
+    "message": "Account active. Equity: $100,000.00 | Buying Power: $63,959.92 | Net Delta: 0.0 | Daily Theta: $0.0",
+    "details": {}
+  },
+  {
+    "timestamp": "12:11:27",
+    "stage": "SCREENING",
+    "agent": "QuantAgent",
+    "message": "Scanning blue-chip options chains for high-probability Wheel candidates...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:00",
+    "stage": "PROPOSALS_GENERATED",
+    "agent": "QuantAgent",
+    "message": "Generated 11 candidate options trade tickets based on IV rank and delta targeting.",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:00",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for INTC (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:17",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "INTC Conviction Score: 45/100 | Regime: BEARISH | Earnings Risk: HIGH",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:17",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting INTC CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:20",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED INTC CASH_SECURED_PUT: VETOED_BY_SENTIMENT_AGENT",
+    "details": {
+      "reason": "Sentiment agent flagged elevated binary/earnings downside risk.",
+      "details": "INTC faces elevated downside risk amid weak PC demand and geopolitical concerns. The proposed $82.5 strike (8.3% OTM) may not adequately compensate for earnings volatility."
+    }
+  },
+  {
+    "timestamp": "12:13:20",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for SOFI (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:35",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "SOFI Conviction Score: 65/100 | Regime: NEUTRAL | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:35",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting SOFI CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:36",
+    "stage": "RISK_APPROVED",
+    "agent": "RiskGovernanceAgent",
+    "message": "APPROVED SOFI CASH_SECURED_PUT @ $16.0 strike. Risk gates cleared.",
+    "details": {
+      "verdict": "APPROVED",
+      "passed_checks": [
+        "Max 10% Position Size Check Passed",
+        "Max 20% Ticker Concentration Check Passed",
+        "Cash Collateral Verification Passed",
+        "Sentiment & Catalyst Risk Check Passed",
+        "Drawdown Circuit Breaker Normal"
+      ],
+      "portfolio_delta_post_trade": -21.91,
+      "estimated_theta_boost": 0.94
+    }
+  },
+  {
+    "timestamp": "12:13:36",
+    "stage": "EXECUTION_COMPLETED",
+    "agent": "ExecutionEngine",
+    "message": "Order submitted to Alpaca Paper Trading: SELL 1x SOFI261016P00016000",
+    "details": {
+      "success": true,
+      "order_id": "65ec2eba-b0dd-4cc4-a1fe-1cb0636de790",
+      "symbol": "SOFI261016P00016000",
+      "qty": 1,
+      "side": "sell",
+      "status": "OrderStatus.ACCEPTED",
+      "submitted_at": "2026-09-01 12:13:37.081240+00:00"
+    }
+  },
+  {
+    "timestamp": "12:13:36",
+    "stage": "SENTIMENT_ANALYSIS",
+    "agent": "SentimentAgent",
+    "message": "Evaluating news, earnings schedule, and catalyst regime for AMD (CASH_SECURED_PUT)...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:51",
+    "stage": "SENTIMENT_SCORE",
+    "agent": "SentimentAgent",
+    "message": "AMD Conviction Score: 65/100 | Regime: BEARISH | Earnings Risk: MODERATE",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:51",
+    "stage": "RISK_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Subjecting AMD CASH_SECURED_PUT proposal to deterministic portfolio risk gates...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:52",
+    "stage": "RISK_VETOED",
+    "agent": "RiskGovernanceAgent",
+    "message": "VETOED AMD CASH_SECURED_PUT: REJECTED_POSITION_SIZE_EXCEEDED",
+    "details": {
+      "reason": "Required collateral ($43,000.00) exceeds 10% position limit ($35,000.00).",
+      "recommendation": "Resize to smaller underlying or tighter spread."
+    }
+  },
+  {
+    "timestamp": "12:13:52",
+    "stage": "HEDGE_AUDIT",
+    "agent": "RiskGovernanceAgent",
+    "message": "Running independent tail-risk stress check...",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:53",
+    "stage": "HEDGE_NORMAL",
+    "agent": "RiskGovernanceAgent",
+    "message": "Market stress index is normal (18.5 < 25.0 threshold). No tail hedge required.",
+    "details": {}
+  },
+  {
+    "timestamp": "12:13:56",
+    "stage": "CYCLE_COMPLETE",
+    "agent": "Orchestrator",
+    "message": "Cycle completed successfully. All logs committed to audit trail.",
+    "details": {}
+  }
+]
