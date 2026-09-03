@@ -77,6 +77,14 @@ body.light-theme {
   gap: 10px;
 }
 
+.mini-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
 .toast {
   background-color: white;
   border: 1px solid var(--border-light);
@@ -88,8 +96,16 @@ body.light-theme {
   font-weight: 500;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 10px;
   animation: slide-in 0.25s ease-out;
+}
+
+.toast > span:first-child,
+.toast > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toast.success {
@@ -183,16 +199,24 @@ body.light-theme {
 
 .auth-logo-badge {
   width: 56px; height: 56px;
-  background: linear-gradient(135deg, #0284c7, #2563eb);
+  background: transparent;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   margin: 0 auto 14px;
-  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
 }
 .shield-icon-lg { width: 30px; height: 30px; }
+
+.aegis-logo {
+  display: block;
+  object-fit: contain;
+}
+
+.aegis-logo-auth {
+  width: 38px;
+  height: 38px;
+}
 
 .auth-title {
   font-size: 19px;
@@ -429,20 +453,23 @@ body.light-theme {
 }
 
 .logo-badge {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #0284c7, #2563eb);
+  width: 48px;
+  height: 48px;
+  background: transparent;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
 }
 
 .shield-icon {
   width: 22px;
   height: 22px;
+}
+
+.aegis-logo-header {
+  width: 42px;
+  height: 42px;
 }
 
 .brand-title {
@@ -605,6 +632,10 @@ button {
   padding: 8px 12px;
   border-radius: var(--radius-md);
   font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .btn-sm-outline:hover {
@@ -665,6 +696,7 @@ button {
 .audio-title {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
   font-size: 11px;
   font-weight: 700;
@@ -807,6 +839,12 @@ button {
 }
 
 .agent-pill-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 22px;
 }
 
@@ -870,10 +908,15 @@ button {
 .panel-title-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
 .panel-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 16px;
 }
 
@@ -1074,6 +1117,12 @@ button {
 }
 
 .risk-gate-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+  gap: 8px;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-primary);
@@ -1140,6 +1189,10 @@ button {
 }
 
 .modal-header h2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 17px;
   font-weight: 800;
 }
@@ -1148,6 +1201,9 @@ button {
   background: none;
   font-size: 18px;
   color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-body {
@@ -1157,6 +1213,10 @@ button {
 }
 
 .explainer-section h3 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
