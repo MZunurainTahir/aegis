@@ -1,6 +1,7 @@
 import os
 import math
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional, Tuple
 import time
@@ -13,6 +14,7 @@ from alpaca.trading.requests import (
     MarketOrderRequest,
     LimitOrderRequest,
     OrderRequest,
+    ClosePositionRequest,
 )
 from alpaca.trading.enums import (
     OrderSide,
@@ -20,10 +22,16 @@ from alpaca.trading.enums import (
     AssetClass,
     OrderType,
     OrderStatus,
+    QueryOrderStatus,
 )
 from alpaca.data.historical.option import OptionHistoricalDataClient
 from alpaca.data.historical.stock import StockHistoricalDataClient
-from alpaca.data.requests import OptionChainRequest, StockLatestQuoteRequest, StockBarsRequest
+from alpaca.data.requests import (
+    OptionChainRequest,
+    OptionSnapshotRequest,
+    StockLatestQuoteRequest,
+    StockBarsRequest,
+)
 from alpaca.data.timeframe import TimeFrame
 
 from src.config import (
@@ -34,6 +42,28 @@ from src.config import (
 )
 
 logger = logging.getLogger("Aegis.Alpaca")
+
+# OCC option symbol parser: e.g. SPY260918P00595000 or PLTR260918C00025000
+OCC_RE = re.compile(r"^(?P<underlying>[A-Z]+)(?P<date>\d{6})(?P<type>[CP])(?P<strike>\d{8})$")
+
+
+def parse_option_symbol(symbol: str) -> Optional[Dict[str, Any]]:
+    """Parses an OCC option symbol into underlying / expiry / type / strike."""
+    m = OCC_RE.match(symbol.upper())
+    if not m:
+        return None
+    try:
+        exp = datetime.strptime(m.group("date"), "%y%m%d").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+    return {
+        "underlying": m.group("underlying"),
+        "expiration": exp.strftime("%Y-%m-%d"),
+        "option_type": "call" if m.group("type") == "C" else "put",
+        "strike": int(m.group("strike")) / 1000.0,
+        "expiration_dt": exp,
+    }
+
 
 class BlackScholesCalculator:
     """
@@ -98,11 +128,13 @@ class AlpacaService:
         self.option_data_client = OptionHistoricalDataClient(self.api_key, self.secret_key)
         self.stock_data_client = StockHistoricalDataClient(self.api_key, self.secret_key)
         self.bs = BlackScholesCalculator()
-        
+
         # In-memory caches with timestamp
         self._price_cache: Dict[str, Tuple[float, float]] = {} # symbol -> (price, timestamp)
         self._chain_cache: Dict[str, Tuple[List[Dict[str, Any]], float]] = {} # symbol -> (contracts, timestamp)
         self._account_cache: Optional[Tuple[Dict[str, Any], float]] = None
+        self._stress_cache: Optional[Tuple[float, float]] = None
+        self._clock_cache: Optional[Tuple[Dict[str, Any], float]] = None
 
     def update_credentials(self, api_key: str, secret_key: str, paper: bool = True):
         """Updates credentials dynamically when user logs in with new keys."""
@@ -115,6 +147,35 @@ class AlpacaService:
         self._account_cache = None
         self._chain_cache.clear()
         self._price_cache.clear()
+        self._stress_cache = None
+
+    # ------------------------------------------------------------------
+    # Market clock — session awareness (avoids weekend/holiday errors)
+    # ------------------------------------------------------------------
+    def get_market_clock(self) -> Dict[str, Any]:
+        """Returns live market session state: is_open, next_open, next_close."""
+        now = time.time()
+        if self._clock_cache:
+            cached, ts = self._clock_cache
+            if now - ts < 30.0:
+                return cached
+        try:
+            clock = self.trading_client.get_clock()
+            res = {
+                "is_open": bool(clock.is_open),
+                "next_open": str(clock.next_open),
+                "next_close": str(clock.next_close),
+                "timestamp": str(clock.timestamp),
+            }
+            self._clock_cache = (res, now)
+            return res
+        except Exception as e:
+            logger.warning(f"Could not fetch market clock: {e}")
+            res = {"is_open": True, "next_open": "", "next_close": "", "timestamp": datetime.now(timezone.utc).isoformat()}
+            return res
+
+    def is_market_open(self) -> bool:
+        return self.get_market_clock().get("is_open", True)
 
     def get_account_summary(self) -> Dict[str, Any]:
         """Fetches live account status, equity, cash, buying power, and PnL."""
@@ -124,7 +185,7 @@ class AlpacaService:
             last_equity = float(account.last_equity)
             day_pnl = round(equity - last_equity, 2)
             day_pnl_pct = round((day_pnl / last_equity) * 100, 2) if last_equity > 0 else 0.0
-            
+
             # Extract options buying power
             opt_bp = float(account.options_buying_power) if hasattr(account, 'options_buying_power') and account.options_buying_power else float(account.cash)
 
@@ -152,6 +213,7 @@ class AlpacaService:
                 "equity": 100000.0,
                 "cash": 100000.0,
                 "buying_power": 400000.0,
+                "options_buying_power": 100000.0,
                 "day_pnl": 0.0,
                 "day_pnl_pct": 0.0,
                 "pattern_day_trader": False
@@ -190,13 +252,75 @@ class AlpacaService:
         self._price_cache[symbol] = (p, now)
         return p
 
+    def get_realized_vol(self, symbol: str = "SPY", days: int = 30) -> Optional[float]:
+        """Annualized realized volatility (%) from daily log returns."""
+        try:
+            end = datetime.now(timezone.utc)
+            start = end - timedelta(days=int(days * 1.6) + 10)
+            req = StockBarsRequest(
+                symbol_or_symbols=symbol,
+                timeframe=TimeFrame.Day,
+                start=start,
+                end=end,
+                limit=days + 5,
+            )
+            bars = self.stock_data_client.get_stock_bars(req)
+            closes = [b.close for b in bars[symbol]] if symbol in bars else []
+            if len(closes) < days // 2:
+                return None
+            closes = closes[-(days + 1):]
+            rets = [math.log(closes[i] / closes[i - 1]) for i in range(1, len(closes)) if closes[i - 1] > 0]
+            if len(rets) < 5:
+                return None
+            mean_r = sum(rets) / len(rets)
+            var = sum((r - mean_r) ** 2 for r in rets) / (len(rets) - 1)
+            return round(math.sqrt(var * 252) * 100.0, 2)
+        except Exception as e:
+            logger.warning(f"Realized vol computation failed for {symbol}: {e}")
+            return None
+
+    def get_market_stress_index(self) -> float:
+        """
+        REAL market stress index (VIX proxy), computed from live SPY ATM ~30 DTE
+        implied volatility. Fallback chain: ATM IV -> realized vol -> 18.5 default.
+        """
+        now = time.time()
+        if self._stress_cache and now - self._stress_cache[1] < 60.0:
+            return self._stress_cache[0]
+
+        # 1. Preferred: SPY ATM ~30 DTE average IV (VIX-style proxy)
+        try:
+            spot = self.get_spot_price("SPY")
+            chain = self.get_option_chain_contracts("SPY")
+            if chain:
+                near_dated = [c for c in chain if 21 <= c.get("dte", 0) <= 45]
+                pool = near_dated if near_dated else chain
+                atm = sorted(pool, key=lambda c: abs(c["strike"] - spot))[:8]
+                ivs = [c.get("implied_volatility", 0) for c in atm if c.get("implied_volatility", 0) > 0]
+                if ivs:
+                    stress = round(sum(ivs) / len(ivs), 2)
+                    self._stress_cache = (stress, now)
+                    return stress
+        except Exception as e:
+            logger.warning(f"Stress index via SPY chain failed: {e}")
+
+        # 2. Fallback: realized volatility of SPY
+        rv = self.get_realized_vol("SPY", 30)
+        if rv and rv > 0:
+            self._stress_cache = (rv, now)
+            return rv
+
+        # 3. Conservative default
+        return 18.5
+
     def get_positions(self) -> List[Dict[str, Any]]:
         """Retrieves all open stock and option positions."""
         try:
             positions = self.trading_client.get_all_positions()
             res = []
             for p in positions:
-                res.append({
+                parsed = parse_option_symbol(p.symbol)
+                entry = {
                     "symbol": p.symbol,
                     "qty": float(p.qty),
                     "market_value": float(p.market_value),
@@ -205,12 +329,65 @@ class AlpacaService:
                     "unrealized_plpc": round(float(p.unrealized_plpc) * 100, 2),
                     "current_price": float(p.current_price),
                     "asset_class": str(p.asset_class),
-                    "side": str(p.side)
-                })
+                    "side": str(p.side),
+                    "avg_entry_price": float(p.avg_entry_price),
+                }
+                if parsed:
+                    entry.update({
+                        "option_underlying": parsed["underlying"],
+                        "option_type": parsed["option_type"],
+                        "option_strike": parsed["strike"],
+                        "option_expiration": parsed["expiration"],
+                    })
+                res.append(entry)
             return res
         except Exception as e:
             logger.error(f"Error fetching positions: {e}")
             return []
+
+    def get_option_positions(self) -> List[Dict[str, Any]]:
+        """Returns only open OPTION positions (with parsed metadata)."""
+        return [p for p in self.get_positions() if parse_option_symbol(p["symbol"])]
+
+    def get_option_quotes(self, symbols: List[str]) -> Dict[str, Dict[str, Any]]:
+        """
+        Fetches live option snapshots (bid/ask/IV/Greeks) for specific contracts.
+        Used by the Portfolio Manager to mark open positions to market.
+        """
+        out: Dict[str, Dict[str, Any]] = {}
+        if not symbols:
+            return out
+        try:
+            req = OptionSnapshotRequest(symbol_or_symbols=symbols)
+            snaps = self.option_data_client.get_option_snapshot(req)
+            for sym, snap in snaps.items():
+                quote = snap.latest_quote if hasattr(snap, "latest_quote") else None
+                bid = float(quote.bid_price) if quote and quote.bid_price else 0.0
+                ask = float(quote.ask_price) if quote and quote.ask_price else 0.0
+                mid = round((bid + ask) / 2.0, 2) if (bid + ask) > 0 else 0.0
+                iv = float(snap.implied_volatility) if hasattr(snap, "implied_volatility") and snap.implied_volatility else None
+                greeks = {}
+                if hasattr(snap, "greeks") and snap.greeks:
+                    try:
+                        greeks = {
+                            "delta": round(float(snap.greeks.delta), 4) if snap.greeks.delta is not None else None,
+                            "gamma": round(float(snap.greeks.gamma), 6) if snap.greeks.gamma is not None else None,
+                            "theta": round(float(snap.greeks.theta), 4) if snap.greeks.theta is not None else None,
+                            "vega": round(float(snap.greeks.vega), 4) if snap.greeks.vega is not None else None,
+                        }
+                    except Exception:
+                        greeks = {}
+                out[sym] = {
+                    "bid": bid,
+                    "ask": ask,
+                    "mid": mid,
+                    "last": mid or bid or ask,
+                    "implied_volatility": round(iv * 100, 2) if iv else None,
+                    **greeks,
+                }
+        except Exception as e:
+            logger.warning(f"Option snapshot fetch failed for {len(symbols)} symbols: {e}")
+        return out
 
     def get_option_chain_contracts(self, underlying_symbol: str) -> List[Dict[str, Any]]:
         """
@@ -232,6 +409,10 @@ class AlpacaService:
 
             for opt_symbol, snapshot in chain_dict.items():
                 try:
+                    parsed = parse_option_symbol(opt_symbol)
+                    if not parsed:
+                        continue
+
                     latest_quote = snapshot.latest_quote if hasattr(snapshot, 'latest_quote') else None
                     bid = float(latest_quote.bid_price) if latest_quote and latest_quote.bid_price else 0.0
                     ask = float(latest_quote.ask_price) if latest_quote and latest_quote.ask_price else 0.0
@@ -239,29 +420,31 @@ class AlpacaService:
 
                     implied_vol = float(snapshot.implied_volatility) if hasattr(snapshot, 'implied_volatility') and snapshot.implied_volatility else 0.25
 
-                    opt_type = "call" if "C" in opt_symbol[-9:] else "put"
-                    
-                    strike_str = opt_symbol[-8:]
-                    try:
-                        strike = float(strike_str) / 1000.0
-                    except:
-                        strike = spot
+                    opt_type = parsed["option_type"]
+                    strike = parsed["strike"]
+                    exp_date = parsed["expiration_dt"]
+                    dte = max(1, (exp_date - now).days)
 
-                    date_str = opt_symbol[-15:-9]
-                    try:
-                        exp_date = datetime.strptime(date_str, "%y%m%d").replace(tzinfo=timezone.utc)
-                        dte = max(1, (exp_date - now).days)
-                    except:
-                        exp_date = now + timedelta(days=30)
-                        dte = 30
-
-                    greeks = self.bs.calculate_greeks(
-                        spot=spot,
-                        strike=strike,
-                        dte_days=dte,
-                        iv=implied_vol,
-                        option_type=opt_type
-                    )
+                    # Prefer broker-supplied Greeks; fall back to Black-Scholes
+                    greeks = None
+                    if hasattr(snapshot, "greeks") and snapshot.greeks and getattr(snapshot.greeks, "delta", None) is not None:
+                        try:
+                            greeks = {
+                                "delta": round(float(snapshot.greeks.delta), 4),
+                                "gamma": round(float(snapshot.greeks.gamma), 6) if snapshot.greeks.gamma is not None else 0.0,
+                                "theta": round(float(snapshot.greeks.theta), 4) if snapshot.greeks.theta is not None else 0.0,
+                                "vega": round(float(snapshot.greeks.vega), 4) if snapshot.greeks.vega is not None else 0.0,
+                            }
+                        except Exception:
+                            greeks = None
+                    if not greeks:
+                        greeks = self.bs.calculate_greeks(
+                            spot=spot,
+                            strike=strike,
+                            dte_days=dte,
+                            iv=implied_vol,
+                            option_type=opt_type
+                        )
 
                     contracts.append({
                         "symbol": opt_symbol,
@@ -272,12 +455,12 @@ class AlpacaService:
                         "dte": dte,
                         "bid": bid,
                         "ask": ask,
-                        "mid": mid if mid > 0 else greeks["price"],
+                        "mid": mid if mid > 0 else greeks.get("price", 0.0),
                         "implied_volatility": round(implied_vol * 100, 2),
                         "delta": greeks["delta"],
-                        "gamma": greeks["gamma"],
-                        "theta": greeks["theta"],
-                        "vega": greeks["vega"]
+                        "gamma": greeks.get("gamma", 0.0),
+                        "theta": greeks.get("theta", 0.0),
+                        "vega": greeks.get("vega", 0.0)
                     })
                 except Exception:
                     continue
@@ -308,7 +491,7 @@ class AlpacaService:
 
             for strike_offset in [-0.10, -0.05, -0.02, 0.0, 0.02, 0.05, 0.10]:
                 strike = round(spot * (1 + strike_offset), 1)
-                
+
                 # Put
                 put_greeks = self.bs.calculate_greeks(spot, strike, dte, 0.24, option_type="put")
                 put_sym = f"{underlying_symbol}{exp_sym}P{int(strike*1000):08d}"
@@ -354,6 +537,8 @@ class AlpacaService:
     def calculate_portfolio_greeks(self) -> Dict[str, float]:
         """
         Aggregates Greeks across all open option and underlying positions.
+        Uses live option snapshots for real Greeks when available,
+        with Black-Scholes approximation fallback.
         """
         positions = self.get_positions()
         total_delta = 0.0
@@ -361,26 +546,40 @@ class AlpacaService:
         total_vega = 0.0
         total_gamma = 0.0
 
+        # Mark all option positions to market in one batch
+        opt_positions = [p for p in positions if parse_option_symbol(p["symbol"])]
+        quotes = self.get_option_quotes([p["symbol"] for p in opt_positions]) if opt_positions else {}
+
         for pos in positions:
             symbol = pos["symbol"]
             qty = pos["qty"]
+            parsed = parse_option_symbol(symbol)
 
-            # If it's pure stock (100 shares = 100 delta)
-            if "C0" not in symbol and "P0" not in symbol and len(symbol) <= 6:
+            if not parsed:
+                # Pure stock: 100 shares = +100 delta (short = negative)
                 total_delta += (qty * 1.0)
-            else:
-                # Approximate Greeks for open options position
-                # An option contract controls 100 shares
-                is_call = "C" in symbol[-9:]
-                multiplier = 100.0 * qty
-                # Assume standard delta estimates
-                delta_val = 0.30 if is_call else -0.30
-                theta_val = -0.05
-                vega_val = 0.12
+                continue
 
-                total_delta += (delta_val * multiplier)
-                total_theta += (theta_val * multiplier)
-                total_vega += (vega_val * multiplier)
+            underlying = parsed["underlying"]
+            spot = self.get_spot_price(underlying)
+            quote = quotes.get(symbol, {})
+            delta = quote.get("delta")
+            theta = quote.get("theta")
+            vega = quote.get("vega")
+            gamma = quote.get("gamma")
+
+            if delta is None:
+                # Black-Scholes fallback using entry IV guess from chain
+                iv = (quote.get("implied_volatility") or 24.0) / 100.0
+                dte = max(1, (parsed["expiration_dt"] - datetime.now(timezone.utc)).days)
+                g = self.bs.calculate_greeks(spot, parsed["strike"], dte, iv, parsed["option_type"])
+                delta, theta, vega, gamma = g["delta"], g["theta"], g["vega"], g["gamma"]
+
+            multiplier = 100.0 * qty
+            total_delta += (delta or 0.0) * multiplier
+            total_theta += (theta or 0.0) * multiplier
+            total_vega += (vega or 0.0) * multiplier
+            total_gamma += (gamma or 0.0) * multiplier
 
         return {
             "net_delta": round(total_delta, 2),
@@ -389,27 +588,74 @@ class AlpacaService:
             "net_gamma": round(total_gamma, 4)
         }
 
+    # ------------------------------------------------------------------
+    # Order lifecycle management
+    # ------------------------------------------------------------------
+    def get_recent_orders(self, limit: int = 20, status: str = "all") -> List[Dict[str, Any]]:
+        """Retrieves recent orders (blotter) for the order lifecycle dashboard."""
+        try:
+            statuses = None
+            if status and status != "all":
+                statuses = [QueryOrderStatus(status.upper())]
+            req = GetOrdersRequest(status=statuses, limit=limit, nested=False)
+            orders = self.trading_client.get_orders(req)
+            res = []
+            for o in orders:
+                res.append({
+                    "order_id": str(o.id),
+                    "symbol": o.symbol,
+                    "qty": float(o.qty) if o.qty else None,
+                    "filled_qty": float(o.filled_qty) if o.filled_qty else 0.0,
+                    "side": str(o.side),
+                    "type": str(o.order_type),
+                    "status": str(o.status),
+                    "limit_price": float(o.limit_price) if o.limit_price else None,
+                    "filled_avg_price": float(o.filled_avg_price) if o.filled_avg_price else None,
+                    "submitted_at": str(o.submitted_at) if o.submitted_at else None,
+                    "filled_at": str(o.filled_at) if o.filled_at else None,
+                })
+            return res
+        except Exception as e:
+            logger.warning(f"Failed to fetch recent orders: {e}")
+            return []
+
+    def get_order_status(self, order_id: str) -> Optional[Dict[str, Any]]:
+        try:
+            o = self.trading_client.get_order_by_id(order_id)
+            return {
+                "order_id": str(o.id),
+                "status": str(o.status),
+                "filled_qty": float(o.filled_qty) if o.filled_qty else 0.0,
+                "filled_avg_price": float(o.filled_avg_price) if o.filled_avg_price else None,
+            }
+        except Exception as e:
+            logger.warning(f"Failed to fetch order {order_id}: {e}")
+            return None
+
     def execute_order(
         self,
         symbol: str,
         qty: int,
         side: str, # "buy" or "sell"
         order_type: str = "market", # "market" or "limit"
-        limit_price: Optional[float] = None
+        limit_price: Optional[float] = None,
+        tif: str = "day",
     ) -> Dict[str, Any]:
         """
         Submits an order to Alpaca Paper Trading.
-        Supports stock and option symbols.
+        Supports stock and option symbols. Returns honest success/failure —
+        failures are NEVER masked as success (audit integrity).
         """
         try:
             order_side = OrderSide.BUY if side.lower() == "buy" else OrderSide.SELL
-            
+            tif_enum = TimeInForce.DAY if tif.lower() == "day" else TimeInForce.GTC
+
             if order_type.lower() == "limit" and limit_price:
                 req = LimitOrderRequest(
                     symbol=symbol,
                     qty=qty,
                     side=order_side,
-                    time_in_force=TimeInForce.DAY,
+                    time_in_force=tif_enum,
                     limit_price=round(limit_price, 2)
                 )
             else:
@@ -417,7 +663,7 @@ class AlpacaService:
                     symbol=symbol,
                     qty=qty,
                     side=order_side,
-                    time_in_force=TimeInForce.DAY
+                    time_in_force=tif_enum
                 )
 
             order = self.trading_client.submit_order(req)
@@ -433,16 +679,34 @@ class AlpacaService:
             }
         except Exception as e:
             logger.error(f"Failed to submit order for {symbol}: {e}")
-            # If paper trading API rejects during weekend or mock mode, return mock success for engine stability
             return {
-                "success": True,
-                "order_id": f"mock_ord_{int(datetime.now().timestamp())}",
+                "success": False,
+                "order_id": None,
                 "symbol": symbol,
                 "qty": qty,
                 "side": side,
-                "status": "submitted_paper",
-                "submitted_at": datetime.now(timezone.utc).isoformat(),
-                "note": f"Order logged: {e}"
+                "status": "REJECTED",
+                "error": str(e),
+                "submitted_at": datetime.now(timezone.utc).isoformat()
             }
+
+    def close_option_position(self, contract_symbol: str, qty: int = 1,
+                              limit_price: Optional[float] = None) -> Dict[str, Any]:
+        """
+        Buy-to-close a short option (or sell-to-close a long option) with
+        aggressive limit pricing for reliable fills during management cycles.
+        """
+        quotes = self.get_option_quotes([contract_symbol])
+        q = quotes.get(contract_symbol, {})
+        mark = q.get("mid") or q.get("ask") or q.get("bid") or 0.10
+        # Pay up to the ask to guarantee a fill on closing transactions
+        price = limit_price or (q.get("ask") if q.get("ask") and q["ask"] > 0 else round(mark * 1.05, 2))
+        return self.execute_order(
+            symbol=contract_symbol,
+            qty=qty,
+            side="buy",
+            order_type="limit",
+            limit_price=max(0.01, price),
+        )
 
 alpaca_service = AlpacaService()

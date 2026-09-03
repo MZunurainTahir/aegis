@@ -3,6 +3,16 @@
 .env.local
 .env.production
 
+# AEGIS runtime artifacts — local trading state, never commit
+data/
+*.sqlite
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+logs/
+static/audio/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -221,3 +231,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.qoder/
+data/
+
+# Local-only deliverables and generator scripts
+docs/
+src/generate_helper_pdf.py
+src/generate_presentation.py
+tests/ui_check.js
+static/audio/*.mp3

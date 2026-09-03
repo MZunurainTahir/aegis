@@ -12,3 +12,7 @@ pandas>=2.2.0
 groq>=0.11.0
 elevenlabs>=1.50.0
 supabase>=2.0.0
+
+# Deck & PDF generation (docs/)
+python-pptx>=0.6.21
+reportlab>=4.0.0

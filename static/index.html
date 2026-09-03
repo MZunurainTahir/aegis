@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AEGIS — Autonomous Risk-Governed Options Desk</title>
-  <meta name="description" content="AEGIS: Institutional-grade autonomous AI options trading desk. Multi-agent Wheel strategy with sovereign risk governance, powered by Alpaca Markets.">
+  <title>AEGIS ALPHA — Autonomous Risk-Governed Options Desk</title>
+  <meta name="description" content="AEGIS ALPHA: Institutional-grade autonomous AI options trading desk. Multi-agent Wheel strategy with sovereign risk governance, live news intelligence, full position lifecycle management, powered by Alpaca Markets.">
+  <link rel="icon" type="image/png" href="/static/aegis-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,8 +14,91 @@
 </head>
 <body class="light-theme">
 
+  <!-- ============================================================
+       SVG ICON SPRITE — single source of truth for all icons
+       Usage: <svg class="icon"><use href="#i-name"></use></svg>
+       ============================================================ -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-shield-plain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol>
+    <symbol id="i-news" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></symbol>
+    <symbol id="i-robot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="12" rx="2"/><path d="M12 8V5"/><circle cx="12" cy="3.5" r="1.5"/><circle cx="9.2" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.8" cy="13" r="1.1" fill="currentColor" stroke="none"/><path d="M9.2 16.8h5.6"/><path d="M2 13v3"/><path d="M22 13v3"/></symbol>
+    <symbol id="i-shield-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-cycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+    <symbol id="i-trending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></symbol>
+    <symbol id="i-cmd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+    <symbol id="i-maximize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 2.5 1 4.7 2.6 6.4L12 12l7.4-3.6A10 10 0 0 0 12 2z" transform="rotate(90 12 12)"/><path d="m12 12 4-6"/><path d="M4.93 4.93a10 10 0 0 1 14.14 0"/></symbol>
+    <symbol id="i-gamma" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6a2 2 0 0 1 2-2h6"/><path d="M4 12h7"/><path d="M20 8v8a4 4 0 0 1-4 4H8"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+  </svg>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
+
+  <!-- Command Palette -->
+  <div class="cmdk-overlay hidden" id="cmdk-overlay">
+    <div class="cmdk-panel">
+      <div class="cmdk-input-wrap">
+        <svg class="icon"><use href="#i-search"></use></svg>
+        <input type="text" id="cmdk-input" placeholder="Type a command… (Run cycle, hedge, theme, export…)" autocomplete="off">
+        <span class="cmdk-esc">ESC</span>
+      </div>
+      <div class="cmdk-list" id="cmdk-list"></div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="modal-overlay" id="shortcuts-modal">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h2 class="modal-title-icon"><svg class="icon"><use href="#i-keyboard"></use></svg> Keyboard Shortcuts</h2>
+        <button class="btn-close-modal" onclick="closeShortcutsModal()" aria-label="Close"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcuts-grid">
+          <div class="shortcut-row"><span class="kbd">Ctrl</span><span class="kbd">K</span><span class="shortcut-desc">Open command palette</span></div>
+          <div class="shortcut-row"><span class="kbd">R</span><span class="shortcut-desc">Run full AI cycle</span></div>
+          <div class="shortcut-row"><span class="kbd">A</span><span class="shortcut-desc">Toggle 24/7 autonomous loop</span></div>
+          <div class="shortcut-row"><span class="kbd">H</span><span class="shortcut-desc">Test tail hedge</span></div>
+          <div class="shortcut-row"><span class="kbd">B</span><span class="shortcut-desc">Play / stop AI voice briefing</span></div>
+          <div class="shortcut-row"><span class="kbd">T</span><span class="shortcut-desc">Toggle light / dark theme</span></div>
+          <div class="shortcut-row"><span class="kbd">E</span><span class="shortcut-desc">Export trade journal as CSV</span></div>
+          <div class="shortcut-row"><span class="kbd">F</span><span class="shortcut-desc">Toggle fullscreen</span></div>
+          <div class="shortcut-row"><span class="kbd">?</span><span class="shortcut-desc">Show this shortcuts panel</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================
        AUTH OVERLAY — 2-panel: Register / Sign In
@@ -30,10 +114,8 @@
 
       <!-- Shared header -->
       <div class="auth-header">
-        <div class="auth-logo-badge">
-          <img src="/static/aegis-logo.png" alt="Aegis logo" class="aegis-logo aegis-logo-auth">
-        </div>
-        <h1 class="auth-title">AEGIS TRADING DESK</h1>
+        <img src="/static/aegis-logo.png" alt="Aegis logo" class="auth-logo-img">
+        <h1 class="auth-title">AEGIS ALPHA</h1>
         <p class="auth-subtitle">Autonomous, Risk-Governed Options Income &amp; Hedging Platform</p>
       </div>
 
@@ -69,7 +151,7 @@
               <div class="input-eye-wrap">
                 <input type="password" id="reg-password" class="form-input" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password" oninput="updatePasswordStrength(this.value)">
                 <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-password', this)" aria-label="Show password">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="icon icon-16"><use href="#i-eye"></use></svg>
                 </button>
               </div>
               <div class="password-strength-bar" id="pwd-strength-bar">
@@ -82,7 +164,7 @@
               <div class="input-eye-wrap">
                 <input type="password" id="reg-confirm-password" class="form-input" placeholder="Repeat password" required minlength="8" autocomplete="new-password">
                 <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-confirm-password', this)" aria-label="Show password">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="icon icon-16"><use href="#i-eye"></use></svg>
                 </button>
               </div>
             </div>
@@ -106,14 +188,14 @@
             <div class="input-eye-wrap">
               <input type="password" id="reg-alpaca-secret" class="form-input font-mono" placeholder="FUPUy4…" autocomplete="off">
               <button type="button" class="eye-toggle" onclick="togglePasswordVis('reg-alpaca-secret', this)" aria-label="Show secret">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="icon icon-16"><use href="#i-eye"></use></svg>
               </button>
             </div>
           </div>
 
           <button type="submit" class="btn-auth-submit" id="btn-register-submit">
             <span>Create Account &amp; Get Started</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg class="icon icon-16"><use href="#i-arrow-right"></use></svg>
           </button>
 
           <p class="auth-switch-text">Already have an account? <button type="button" class="link-btn" onclick="switchToSignIn()">Sign In</button></p>
@@ -134,7 +216,7 @@
             <div class="input-eye-wrap">
               <input type="password" id="login-password" class="form-input" placeholder="Your password" required autocomplete="current-password">
               <button type="button" class="eye-toggle" onclick="togglePasswordVis('login-password', this)" aria-label="Show password">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="icon icon-16"><use href="#i-eye"></use></svg>
               </button>
             </div>
           </div>
@@ -151,7 +233,7 @@
             <div class="input-eye-wrap">
               <input type="password" id="alpaca-secret" class="form-input font-mono" placeholder="FUPUy4…" required autocomplete="off">
               <button type="button" class="eye-toggle" onclick="togglePasswordVis('alpaca-secret', this)" aria-label="Show secret">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="icon icon-16"><use href="#i-eye"></use></svg>
               </button>
             </div>
           </div>
@@ -166,7 +248,7 @@
 
           <button type="submit" class="btn-auth-submit" id="btn-auth-submit">
             <span>Sign In &amp; Enter Trading Desk</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg class="icon icon-16"><use href="#i-arrow-right"></use></svg>
           </button>
 
           <p class="auth-switch-text">New here? <button type="button" class="link-btn" onclick="switchToRegister()">Create Account</button></p>
@@ -183,9 +265,7 @@
     <!-- Top Navigation Header -->
     <header class="top-nav">
       <div class="brand-container">
-        <div class="logo-badge">
-          <img src="/static/aegis-logo.png" alt="Aegis logo" class="aegis-logo aegis-logo-header">
-        </div>
+        <img src="/static/aegis-logo.png" alt="Aegis Alpha logo" class="brand-logo-img" id="brand-logo">
         <div class="brand-text">
           <div class="brand-title">AEGIS <span class="badge-alpha">ALPHA</span></div>
           <div class="brand-subtitle">Autonomous Risk-Governed Options Desk</div>
@@ -195,8 +275,12 @@
       <!-- Live Status Pill & Account -->
       <div class="header-center-info">
         <div class="status-indicator-box">
-          <span class="pulse-dot"></span>
-          <span id="system-status-text">ALPACA CONNECTED</span>
+          <span class="pulse-dot" id="market-status-dot"></span>
+          <span id="system-status-text">CONNECTING…</span>
+        </div>
+        <div class="countdown-chip" id="countdown-chip" title="Market session countdown">
+          <svg class="icon icon-14"><use href="#i-clock"></use></svg>
+          <span id="countdown-text">—</span>
         </div>
         <div class="account-badge">
           <span class="acc-label">ACCOUNT ID:</span>
@@ -210,45 +294,111 @@
 
       <!-- Quick Action Bar -->
       <div class="header-actions">
-        <button class="btn-primary" id="btn-run-cycle" title="Trigger full 3-Agent cycle">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <button class="btn-primary" id="btn-run-cycle" title="Trigger full multi-Agent cycle (R)">
+          <svg class="icon icon-16"><use href="#i-play"></use></svg>
           <span>Run AI Cycle</span>
         </button>
 
-        <button class="btn-toggle-auto" id="btn-toggle-auto">
-          <svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 13h6l-1 9 9-11h-6l1-9z"/></svg>
+        <button class="btn-toggle-auto" id="btn-toggle-auto" title="Toggle autonomous loop (A)">
+          <svg class="icon icon-16"><use href="#i-bolt"></use></svg>
           <span id="auto-btn-text">Enable 24/7 Loop</span>
         </button>
 
-        <button class="btn-hedge-danger" id="btn-emergency-hedge" title="Test Autonomous Tail-Risk Put Hedging">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <button class="btn-hedge-danger" id="btn-emergency-hedge" title="Test Autonomous Tail-Risk Put Hedging (H)">
+          <svg class="icon icon-16"><use href="#i-shield-alert"></use></svg>
           <span>Test Tail Hedge</span>
         </button>
 
-        <button class="btn-sm-outline" onclick="showExplainerModal()">
-          <svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 5.8 1c-.7 1.5-2.2 2.1-3.1 3.2-.4.5-.6 1-.6 1.7"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/></svg>
+        <button class="btn-sm-outline btn-cmdk" onclick="openCommandPalette()" title="Command palette (Ctrl+K)">
+          <svg class="icon icon-14"><use href="#i-cmd"></use></svg>
+          <span>Ctrl K</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <div class="notif-wrap">
+          <button class="btn-icon-only" id="btn-notif" onclick="toggleNotifPanel()" title="Notifications">
+            <svg class="icon icon-17"><use href="#i-bell"></use></svg>
+            <span class="notif-count hidden" id="notif-count">0</span>
+          </button>
+          <div class="notif-panel hidden" id="notif-panel">
+            <div class="notif-panel-header">
+              <span class="notif-panel-title">Notifications</span>
+              <button class="link-btn" onclick="clearNotifications()">Clear all</button>
+            </div>
+            <div class="notif-panel-body" id="notif-list">
+              <div class="notif-empty">No notifications yet — events stream in live.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Dropdown -->
+        <div class="settings-wrap">
+          <button class="btn-icon-only" id="btn-settings" onclick="toggleSettingsPanel()" title="Desk settings">
+            <svg class="icon icon-17"><use href="#i-settings"></use></svg>
+          </button>
+          <div class="settings-panel hidden" id="settings-panel">
+            <div class="settings-row" onclick="toggleTheme()" role="button" tabindex="0">
+              <svg class="icon icon-16"><use href="#i-moon"></use></svg>
+              <span id="theme-label">Dark theme</span>
+            </div>
+            <div class="settings-row" onclick="toggleSoundAlerts()" role="button" tabindex="0">
+              <svg class="icon icon-16"><use href="#i-volume"></use></svg>
+              <span id="sound-label">Sound alerts: ON</span>
+            </div>
+            <div class="settings-row" onclick="toggleFullscreen()" role="button" tabindex="0">
+              <svg class="icon icon-16"><use href="#i-maximize"></use></svg>
+              <span>Fullscreen (F)</span>
+            </div>
+            <div class="settings-row" onclick="showShortcutsModal()" role="button" tabindex="0">
+              <svg class="icon icon-16"><use href="#i-keyboard"></use></svg>
+              <span>Shortcuts (?)</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-sm-outline" onclick="showExplainerModal()" title="How Aegis Works">
+          <svg class="icon icon-14"><use href="#i-help"></use></svg>
           <span>How Aegis Works</span>
         </button>
 
         <button class="btn-logout" onclick="handleLogout()" title="Disconnect & Switch Account" id="btn-logout">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          <svg class="icon icon-15"><use href="#i-arrow-right"></use></svg>
         </button>
       </div>
     </header>
 
+    <!-- Live Ticker Tape -->
+    <div class="ticker-tape" id="ticker-tape" aria-label="Live watchlist quotes">
+      <div class="ticker-tape-track" id="ticker-tape-track">
+        <span class="ticker-loading">Connecting to market data feed…</span>
+      </div>
+    </div>
+
     <!-- Audio Briefing Bar -->
     <section class="briefing-bar" id="briefing-bar">
       <div class="audio-control-wrapper">
-        <button class="btn-play-audio" id="btn-play-briefing" title="Click to listen to AI Voice Briefing">
-          <svg id="play-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <button class="btn-play-audio" id="btn-play-briefing" title="Play / stop AI voice briefing (B)">
+          <svg class="icon icon-18" id="play-icon"><use href="#i-play"></use></svg>
         </button>
         <div class="audio-info">
           <div class="audio-title">
-            <svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 1 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>
-            <span>EXECUTIVE AI VOICE BRIEFING (ELEVENLABS)</span>
+            <span class="audio-title-label">
+              <svg class="icon icon-14"><use href="#i-mic"></use></svg>
+              EXECUTIVE AI VOICE BRIEFING (ELEVENLABS)
+            </span>
             <span class="audio-status-pill" id="audio-status-pill">READY</span>
           </div>
           <div class="audio-text" id="briefing-text-display">"Aegis intelligence brief: Dedicated paper account active at $100,000 equity. Portfolio Greeks calibrated."</div>
+        </div>
+        <div class="audio-controls-right">
+          <div class="volume-wrap" title="Volume">
+            <svg class="icon icon-14"><use href="#i-volume"></use></svg>
+            <input type="range" id="volume-slider" min="0" max="100" value="100" class="volume-slider" aria-label="Briefing volume">
+          </div>
+          <button class="btn-audio-regen" id="btn-regen-briefing" title="Regenerate briefing with live numbers">
+            <svg class="icon icon-14"><use href="#i-refresh"></use></svg>
+            <span>Regenerate</span>
+          </button>
         </div>
       </div>
       <audio id="briefing-audio-player" preload="auto" style="display:none;"></audio>
@@ -267,6 +417,17 @@
           <div class="metric-footer">
             <span class="trend-positive" id="day-pnl-display">+$0.00 (+0.0%)</span>
             <span class="subtext">Starting: $100,000</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">REALIZED P&amp;L (LIFETIME)</span>
+            <span class="metric-tag tag-gold">JOURNAL</span>
+          </div>
+          <div class="metric-value text-emerald" id="realized-pnl">$0.00</div>
+          <div class="metric-footer">
+            <span class="subtext">Win Rate: <strong id="win-rate-val">—</strong> | Closed: <strong id="closed-trades-val">0</strong></span>
           </div>
         </div>
 
@@ -308,9 +469,9 @@
             <span class="metric-label">TAIL STRESS GAUGE</span>
             <span class="metric-tag tag-safe" id="stress-badge">NORMAL</span>
           </div>
-          <div class="metric-value" id="stress-index-val">18.50</div>
+          <div class="metric-value" id="stress-index-val">—</div>
           <div class="metric-footer">
-            <span class="subtext">Hedge Trigger: &gt; 25.0</span>
+            <span class="subtext">Live SPY IV Proxy | Hedge Trigger: &gt; 25.0</span>
           </div>
         </div>
       </section>
@@ -318,24 +479,29 @@
       <!-- Multi-Agent Architecture Bar -->
       <section class="agents-status-bar">
         <div class="agent-pill active" id="pill-quant">
-          <div class="agent-pill-icon">
-            <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20V8"/></svg>
-          </div>
+          <div class="agent-pill-icon"><svg class="icon icon-20"><use href="#i-chart"></use></svg></div>
           <div class="agent-pill-info">
             <div class="agent-pill-name">QUANT AGENT</div>
-            <div class="agent-pill-role">Options Chain &amp; Greeks Screener</div>
+            <div class="agent-pill-role">Options Chain, Greeks &amp; IV Rank Screener</div>
           </div>
           <span class="pill-badge">SCREENING</span>
         </div>
 
-        <div class="agent-connector">
-          <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+        <div class="agent-connector"><svg class="icon icon-14"><use href="#i-arrow-right"></use></svg></div>
+
+        <div class="agent-pill active" id="pill-news">
+          <div class="agent-pill-icon"><svg class="icon icon-20"><use href="#i-news"></use></svg></div>
+          <div class="agent-pill-info">
+            <div class="agent-pill-name">NEWS AGENT</div>
+            <div class="agent-pill-role">Live RSS Ingestion &amp; Regime Classifier</div>
+          </div>
+          <span class="pill-badge" id="regime-badge">SCANNING</span>
         </div>
 
+        <div class="agent-connector"><svg class="icon icon-14"><use href="#i-arrow-right"></use></svg></div>
+
         <div class="agent-pill active" id="pill-sentiment">
-          <div class="agent-pill-icon">
-            <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4"/><path d="M9 3h6"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 17h8"/><path d="M4 12H2M22 12h-2"/></svg>
-          </div>
+          <div class="agent-pill-icon"><svg class="icon icon-20"><use href="#i-robot"></use></svg></div>
           <div class="agent-pill-info">
             <div class="agent-pill-name">SENTIMENT AGENT</div>
             <div class="agent-pill-role">Multi-LLM News &amp; Earnings Gate</div>
@@ -343,19 +509,26 @@
           <span class="pill-badge">SCORED (88/100)</span>
         </div>
 
-        <div class="agent-connector">
-          <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
-        </div>
+        <div class="agent-connector"><svg class="icon icon-14"><use href="#i-arrow-right"></use></svg></div>
 
-        <div class="agent-pill active danger-border" id="pill-risk">
-          <div class="agent-pill-icon">
-            <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-          </div>
+        <div class="agent-pill active" id="pill-risk">
+          <div class="agent-pill-icon"><svg class="icon icon-20"><use href="#i-shield"></use></svg></div>
           <div class="agent-pill-info">
             <div class="agent-pill-name">RISK GOVERNANCE AGENT</div>
             <div class="agent-pill-role">Sovereign Veto &amp; Tail Hedging</div>
           </div>
           <span class="pill-badge badge-danger">VETO AUTHORITY</span>
+        </div>
+
+        <div class="agent-connector"><svg class="icon icon-14"><use href="#i-arrow-right"></use></svg></div>
+
+        <div class="agent-pill active" id="pill-pm">
+          <div class="agent-pill-icon"><svg class="icon icon-20"><use href="#i-cycle"></use></svg></div>
+          <div class="agent-pill-info">
+            <div class="agent-pill-name">PORTFOLIO MANAGER</div>
+            <div class="agent-pill-role">Take-Profit · Stop-Loss · Roll · Expiry</div>
+          </div>
+          <span class="pill-badge">MANAGING</span>
         </div>
       </section>
 
@@ -367,12 +540,13 @@
           <div class="panel-card">
             <div class="panel-header">
               <div class="panel-title-wrap">
-                <span class="panel-icon">
-                  <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
-                </span>
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-target"></use></svg></span>
                 <h2 class="panel-title">Quant Screened Wheel Opportunities</h2>
               </div>
-              <button class="btn-sm" id="btn-refresh-screen">Refresh Screen</button>
+              <button class="btn-sm" id="btn-refresh-screen">
+                <svg class="icon icon-14"><use href="#i-refresh"></use></svg>
+                <span>Refresh Screen</span>
+              </button>
             </div>
             <div class="table-container">
               <table class="data-table" id="proposals-table">
@@ -384,13 +558,14 @@
                     <th>STRIKE</th>
                     <th>DTE</th>
                     <th>DELTA</th>
+                    <th>IV RANK</th>
                     <th>EST. CREDIT</th>
                     <th>ANN. YIELD</th>
                     <th>EXECUTION</th>
                   </tr>
                 </thead>
                 <tbody id="proposals-tbody">
-                  <tr><td colspan="9" class="text-center py-4">Scanning options chains...</td></tr>
+                  <tr><td colspan="10" class="text-center py-4">Scanning options chains...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -400,9 +575,7 @@
           <div class="panel-card mt-4">
             <div class="panel-header">
               <div class="panel-title-wrap">
-                <span class="panel-icon">
-                  <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 12h18"/></svg>
-                </span>
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-briefcase"></use></svg></span>
                 <h2 class="panel-title">Active Wheel Positions &amp; Underlying Assets</h2>
               </div>
               <span class="badge-count" id="positions-count">0 Positions</span>
@@ -427,36 +600,96 @@
             </div>
           </div>
 
-          <!-- Backtested Performance Chart -->
+          <!-- Position Management Monitor -->
           <div class="panel-card mt-4">
             <div class="panel-header">
               <div class="panel-title-wrap">
-                <span class="panel-icon">
-                  <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-10"/><path d="M16 5h5v5"/><path d="M3 21h18"/></svg>
-                </span>
-                <h2 class="panel-title">Backtested Strategy Performance vs. S&amp;P 500</h2>
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-cycle"></use></svg></span>
+                <h2 class="panel-title">Portfolio Manager — Open Option Marks</h2>
               </div>
-              <span class="badge-accent">88.4% Win Rate</span>
+              <span class="badge-count" id="marks-count">0 Options</span>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="marks-table">
+                <thead>
+                  <tr>
+                    <th>CONTRACT</th>
+                    <th>QTY</th>
+                    <th>ENTRY</th>
+                    <th>MARK</th>
+                    <th>P&amp;L %</th>
+                    <th>DTE</th>
+                    <th>MANAGEMENT STATE</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="marks-tbody">
+                  <tr><td colspan="8" class="text-center py-4">No open option positions to manage.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Real Performance Chart -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-trending"></use></svg></span>
+                <h2 class="panel-title">Live Performance — Equity Curve &amp; Analytics (SQLite Journal)</h2>
+              </div>
+              <div class="chart-controls">
+                <div class="timeframe-btns" id="timeframe-btns">
+                  <button class="tf-btn active" data-tf="all">All</button>
+                  <button class="tf-btn" data-tf="50">50</button>
+                  <button class="tf-btn" data-tf="20">20</button>
+                </div>
+                <span class="badge-accent" id="live-perf-badge">LIVE JOURNAL DATA</span>
+              </div>
             </div>
             <div class="chart-wrapper">
               <canvas id="performanceChart" height="90"></canvas>
             </div>
             <div class="stats-grid">
               <div class="stat-box">
-                <div class="stat-num text-emerald">24.6%</div>
-                <div class="stat-lbl">Annualized Return</div>
+                <div class="stat-num text-emerald" id="stat-total-return">0.0%</div>
+                <div class="stat-lbl">Total Return</div>
               </div>
               <div class="stat-box">
-                <div class="stat-num">2.18</div>
+                <div class="stat-num" id="stat-sharpe">—</div>
                 <div class="stat-lbl">Sharpe Ratio</div>
               </div>
               <div class="stat-box">
-                <div class="stat-num text-emerald">2.45</div>
+                <div class="stat-num" id="stat-profit-factor">—</div>
                 <div class="stat-lbl">Profit Factor</div>
               </div>
               <div class="stat-box">
-                <div class="stat-num text-coral">6.8%</div>
+                <div class="stat-num text-coral" id="stat-max-dd">0.0%</div>
                 <div class="stat-lbl">Max Drawdown</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- P&L Attribution: heatmap + strategy breakdown -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-activity"></use></svg></span>
+                <h2 class="panel-title">P&amp;L Attribution — By Ticker &amp; Strategy</h2>
+              </div>
+              <span class="badge-count" id="attribution-count">Journal Analytics</span>
+            </div>
+            <div class="attribution-grid">
+              <div class="attribution-col">
+                <div class="attribution-title">REALIZED P&amp;L BY TICKER</div>
+                <div class="heatmap-grid" id="ticker-heatmap">
+                  <span class="heatmap-empty">No closed trades yet.</span>
+                </div>
+              </div>
+              <div class="attribution-col">
+                <div class="attribution-title">STRATEGY BREAKDOWN</div>
+                <div class="strategy-bars" id="strategy-bars">
+                  <span class="heatmap-empty">No closed trades yet.</span>
+                </div>
               </div>
             </div>
           </div>
@@ -464,30 +697,163 @@
 
         <!-- Right Column -->
         <div class="content-right">
-          <div class="panel-card h-full flex-col">
+          <!-- Live Market Monitor -->
+          <div class="panel-card">
             <div class="panel-header">
               <div class="panel-title-wrap">
-                <span class="panel-icon">
-                  <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 13h6l-1 9 9-11h-6l1-9z"/></svg>
-                </span>
-                <h2 class="panel-title">3-Agent Real-time Decision Stream</h2>
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-globe"></use></svg></span>
+                <h2 class="panel-title">Live Market Monitor</h2>
               </div>
-              <span class="pulse-live">AUDITED</span>
+              <span class="pulse-live" id="news-live-badge">RSS LIVE</span>
+            </div>
+            <div class="market-monitor-grid">
+              <div class="monitor-tile">
+                <div class="monitor-label">MARKET REGIME</div>
+                <div class="monitor-value" id="regime-value">—</div>
+                <div class="monitor-sub" id="regime-summary">Analyzing live headlines…</div>
+              </div>
+              <div class="monitor-tile">
+                <div class="monitor-label">MARKET SESSION</div>
+                <div class="monitor-value" id="session-value">—</div>
+                <div class="monitor-sub" id="session-sub">—</div>
+              </div>
+            </div>
+            <div class="news-filter-wrap">
+              <svg class="icon icon-14"><use href="#i-search"></use></svg>
+              <input type="text" id="news-search" class="news-filter-input" placeholder="Filter headlines…">
+            </div>
+            <div class="news-feed" id="news-feed">
+              <div class="news-item">Fetching live headlines from Google News RSS…</div>
+            </div>
+          </div>
+
+          <!-- Greeks & Exposure Monitor -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-gamma"></use></svg></span>
+                <h2 class="panel-title">Portfolio Greeks &amp; Exposure Monitor</h2>
+              </div>
+              <span class="badge-accent">RISK ENGINE</span>
+            </div>
+            <div class="greeks-panel">
+              <div class="greek-row">
+                <div class="greek-label">
+                  <svg class="icon icon-14"><use href="#i-activity"></use></svg>
+                  <span>NET DELTA</span>
+                </div>
+                <div class="greek-track">
+                  <div class="greek-band"></div>
+                  <div class="greek-marker" id="greek-delta-marker" style="left:50%"></div>
+                </div>
+                <span class="greek-val" id="greek-delta-val">0.0 Δ</span>
+              </div>
+              <div class="greek-row">
+                <div class="greek-label">
+                  <svg class="icon icon-14"><use href="#i-clock"></use></svg>
+                  <span>THETA / DAY</span>
+                </div>
+                <div class="greek-track">
+                  <div class="greek-fill theta" id="greek-theta-fill" style="width:0%"></div>
+                </div>
+                <span class="greek-val" id="greek-theta-val">+$0.00</span>
+              </div>
+              <div class="greek-row">
+                <div class="greek-label">
+                  <svg class="icon icon-14"><use href="#i-gauge"></use></svg>
+                  <span>STRESS INDEX</span>
+                </div>
+                <div class="greek-track">
+                  <div class="greek-fill stress" id="greek-stress-fill" style="width:0%"></div>
+                  <div class="greek-threshold" title="Hedge trigger at 25"></div>
+                </div>
+                <span class="greek-val" id="greek-stress-val">—</span>
+              </div>
+              <div class="greek-row">
+                <div class="greek-label">
+                  <svg class="icon icon-14"><use href="#i-briefcase"></use></svg>
+                  <span>CASH DEPLOYED</span>
+                </div>
+                <div class="greek-track">
+                  <div class="greek-fill cash" id="greek-cash-fill" style="width:0%"></div>
+                </div>
+                <span class="greek-val" id="greek-cash-val">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trade Journal -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-scroll"></use></svg></span>
+                <h2 class="panel-title">Persistent Trade Journal</h2>
+              </div>
+              <div class="journal-toolbar">
+                <div class="journal-search-wrap">
+                  <svg class="icon icon-14"><use href="#i-search"></use></svg>
+                  <input type="text" id="journal-search" class="journal-search" placeholder="Search ticker / strategy…">
+                </div>
+                <select id="journal-status-filter" class="journal-filter" aria-label="Filter by status">
+                  <option value="ALL">All Status</option>
+                  <option value="OPEN">Open</option>
+                  <option value="CLOSED">Closed</option>
+                  <option value="EXPIRED">Expired</option>
+                  <option value="ASSIGNED">Assigned</option>
+                </select>
+                <button class="btn-sm" id="btn-export-csv" title="Export filtered journal to CSV (E)">
+                  <svg class="icon icon-14"><use href="#i-download"></use></svg>
+                  <span>CSV</span>
+                </button>
+              </div>
+            </div>
+            <div class="table-container journal-table">
+              <table class="data-table" id="journal-table">
+                <thead>
+                  <tr>
+                    <th>TIME</th>
+                    <th>TICKER</th>
+                    <th>STRATEGY</th>
+                    <th>SIDE</th>
+                    <th>PREMIUM</th>
+                    <th>STATUS</th>
+                    <th>REALIZED P&amp;L</th>
+                  </tr>
+                </thead>
+                <tbody id="journal-tbody">
+                  <tr><td colspan="7" class="text-center py-4">No journal entries yet. Run a cycle to begin the audit trail.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="journal-count-bar">
+              <span class="subtext" id="journal-count">0 Trades</span>
+              <span class="subtext" id="journal-filtered-count"></span>
+            </div>
+          </div>
+
+          <!-- Decision Stream Terminal -->
+          <div class="panel-card mt-4 h-full flex-col">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon"><svg class="icon icon-18"><use href="#i-zap"></use></svg></span>
+                <h2 class="panel-title">Multi-Agent Real-time Decision Stream</h2>
+              </div>
+              <span class="pulse-live" id="ws-status-badge">WEBSOCKET</span>
             </div>
             <div class="terminal-box" id="terminal-feed">
               <div class="terminal-row sys-log">
                 <span class="term-time">[09:30:00]</span>
                 <span class="term-badge badge-sys">SYSTEM</span>
-                <span class="term-text">Aegis autonomous risk-governed options engine initialized.</span>
+                <span class="term-text">Aegis autonomous risk-governed options engine initialized. WebSocket stream connecting…</span>
               </div>
             </div>
 
             <!-- Risk Gate Governance Matrix -->
             <div class="risk-gate-box">
               <div class="risk-gate-title">
-              <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-              Deterministic Risk Gate Controls
-            </div>
+                <svg class="icon icon-16"><use href="#i-shield"></use></svg>
+                <span>Deterministic Risk Gate Controls</span>
+              </div>
               <div class="gate-item">
                 <span>Max Capital / Position:</span>
                 <strong>≤ 35% ($35,000.00)</strong>
@@ -506,7 +872,11 @@
               </div>
               <div class="gate-item">
                 <span>Tail-Risk Put Hedge:</span>
-                <strong>VIX Stress &gt; 25.0</strong>
+                <strong>SPY IV Stress &gt; 25.0</strong>
+              </div>
+              <div class="gate-item">
+                <span>Position Management:</span>
+                <strong>50% Profit-Take · 200% Stop · Roll ≤ 5 DTE</strong>
               </div>
             </div>
           </div>
@@ -519,37 +889,35 @@
   <div class="modal-overlay" id="explainer-modal">
     <div class="modal-card modal-sm">
       <div class="modal-header">
-        <h2>
-          <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2v2"/><path d="M12 6a4 4 0 0 1 4 4c0 2-1 3-2.5 4.2l-.5.4c-.9.8-1.5 1.5-1.5 2.9"/><path d="M12 6a4 4 0 0 0-4 4c0 2 1 3 2.5 4.2l.5.4c.9.8 1.5 1.5 1.5 2.9"/></svg>
-          Understanding Aegis &amp; "Run AI Cycle"
-        </h2>
-        <button class="btn-close-modal" onclick="closeExplainerModal()">
-          <svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>
-        </button>
+        <h2 class="modal-title-icon"><svg class="icon icon-18"><use href="#i-bulb"></use></svg> Understanding Aegis ALPHA &amp; "Run AI Cycle"</h2>
+        <button class="btn-close-modal" onclick="closeExplainerModal()" aria-label="Close"><svg class="icon"><use href="#i-x"></use></svg></button>
       </div>
       <div class="modal-body">
         <div class="explainer-section">
-          <h3>
-            <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
-            What does "Run AI Cycle" do?
-          </h3>
+          <h3><svg class="icon icon-16"><use href="#i-play"></use></svg> What does "Run AI Cycle" do?</h3>
           <p>
             The core requirement of the Alpaca Hackathon is an <strong>Autonomous AI Trading Agent</strong>.
-            When you click <strong>Run AI Cycle</strong> (or enable the 24/7 background loop), Aegis executes a sequential triad:
+            When you click <strong>Run AI Cycle</strong> (or enable the 24/7 background loop), Aegis executes a full institutional pipeline:
           </p>
           <ol class="explainer-list">
-            <li><strong>Quant Agent:</strong> Pulls live options chains across SPY, QQQ, AAPL, NVDA, TSLA, and calculates Black-Scholes Greeks (Δ, Θ, V) and annualized yields.</li>
-            <li><strong>Sentiment Agent:</strong> Queries multi-LLM consensus (Groq Llama 3.3, Gemini Flash, DeepSeek) to evaluate news catalysts and earnings dates.</li>
-            <li><strong>Risk Governance Agent:</strong> Evaluates collateral against strict position size limits. If approved, it automatically routes the trade to Alpaca Paper Trading.</li>
+            <li><strong>Portfolio Manager:</strong> Sweeps ALL open positions first — takes profit at 50%, stops losses at 200%, rolls ITM contracts, and sweeps expiries. Realized P&L is journaled instantly.</li>
+            <li><strong>News Agent:</strong> Ingests LIVE headlines via Google News RSS and classifies the market regime (RISK_ON / NEUTRAL / RISK_OFF / CRISIS).</li>
+            <li><strong>Quant Agent:</strong> Pulls live options chains across SPY, QQQ, AAPL, NVDA, TSLA + more, computes Black-Scholes Greeks, IV rank, and annualized yields — with duplicate-position guards.</li>
+            <li><strong>Sentiment Agent:</strong> Multi-LLM consensus (Groq, Cerebras, Gemini, DeepSeek) scores conviction 1-100 on REAL news. Earnings blackout enforced.</li>
+            <li><strong>Risk Governance Agent:</strong> Evaluates collateral against strict position limits. If approved, the trade routes to Alpaca Paper Trading automatically.</li>
+            <li><strong>Tail Hedge Engine:</strong> Independently monitors a live SPY-IV stress index and buys protective puts when volatility spikes.</li>
           </ol>
         </div>
         <div class="explainer-section mt-3">
-          <h3>
-            <svg class="mini-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 13h6l-1 9 9-11h-6l1-9z"/></svg>
-            How to Deploy Individual Trades Manually?
-          </h3>
+          <h3><svg class="icon icon-16"><use href="#i-zap"></use></svg> How to Deploy Individual Trades Manually?</h3>
           <p>
             In the <strong>Quant Screened Wheel Opportunities</strong> table, click the green <strong>"Deploy"</strong> button next to any candidate contract to submit the trade ticket directly to your Alpaca paper brokerage account.
+          </p>
+        </div>
+        <div class="explainer-section mt-3">
+          <h3><svg class="icon icon-16"><use href="#i-chart"></use></svg> Where do performance numbers come from?</h3>
+          <p>
+            All analytics (equity curve, win rate, Sharpe, drawdown) are computed from the <strong>SQLite trade journal</strong> — every order, close, roll and expiry is persisted and attributed. No hardcoded backtest numbers.
           </p>
         </div>
       </div>

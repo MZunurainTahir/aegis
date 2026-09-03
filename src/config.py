@@ -27,6 +27,10 @@ HF_TOKEN = os.getenv("HF_TOKEN", "")
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
 SPEECHMATICS_API_KEY = os.getenv("SPEECHMATICS_API_KEY", "")
 
+# Notifications (Telegram — optional)
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+
 # Supabase — User Auth & Profile Storage
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -49,7 +53,10 @@ RISK_RULES = {
     "CALL_TARGET_DELTA_MAX": 0.35,
     "PROFIT_TAKE_PCT": 0.50,               # Close short option at 50% max profit
     "STOP_LOSS_PCT": 2.00,                 # Stop loss at 200% loss on premium
-    "STRESS_VIX_HEDGE_THRESHOLD": 25.0     # Trigger automatic tail hedge when stress spikes
+    "STRESS_VIX_HEDGE_THRESHOLD": 25.0,     # Trigger automatic tail hedge when stress spikes
+    "MAX_NEW_TRADES_PER_CYCLE": 3,         # Diversification: max new positions opened per cycle
+    "HEDGE_COOLDOWN_HOURS": 20,            # Don't re-hedge within this window
+    "MIN_CASH_RESERVE_PCT": 0.05           # Keep 5% of equity as untouchable dry powder
 }
 
 LOGS_DIR = BASE_DIR / "logs"
@@ -57,3 +64,8 @@ LOGS_DIR.mkdir(exist_ok=True)
 DECISION_LOG_PATH = LOGS_DIR / "decision_audit_trail.json"
 AUDIO_OUTPUT_DIR = BASE_DIR / "static" / "audio"
 AUDIO_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Persistent trade journal & performance analytics (SQLite)
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+DATABASE_PATH = DATA_DIR / "aegis_journal.db"
