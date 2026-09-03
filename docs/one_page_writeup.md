@@ -3,8 +3,7 @@
 **Track:** Options Alpha / Income & Portfolio Overlay Agents
 **Team Name:** ApexArbitrage
 **Team Members:** Muhammad Zun U Rain Tahir, Anne Loraine A. Pardillo, Muhammad Abdullah Khalid
-**Dedicated Paper Account ID:** `a6f90060-9a9d-4ab6-949b-3238a0a40615`
-**Starting Balance:** $100,000.00 USD
+**Submission Paper Account:** `PA3LPXL9HASE` — $100,000.00 USD (dedicated hackathon account)
 **Live Cockpit:** https://web-production-5ded7.up.railway.app
 **Repository:** https://github.com/MZunurainTahir/aegis
 
