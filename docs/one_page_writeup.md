@@ -4,7 +4,7 @@
 **Team Name:** ApexArbitrage
 **Team Members:** Muhammad Zun U Rain Tahir, Anne Loraine A. Pardillo, Muhammad Abdullah Khalid
 **Submission Paper Account:** `PA3LPXL9HASE` — $100,000.00 USD (dedicated hackathon account)
-**Live Cockpit:** https://web-production-5ded7.up.railway.app
+**Live Cockpit:** https://web-production-8078.up.railway.app
 **Repository:** https://github.com/MZunurainTahir/aegis
 
 ---
