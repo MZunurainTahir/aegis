@@ -235,7 +235,9 @@ __marimo__/
 .qoder/
 
 # Local-only deliverables and generator scripts
-docs/
+# (one_page_writeup.md IS committed — required hackathon submission artifact)
+docs/*
+!docs/one_page_writeup.md
 src/generate_helper_pdf.py
 src/generate_presentation.py
 tests/ui_check.js
