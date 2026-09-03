@@ -3,13 +3,14 @@
 .env.local
 .env.production
 
-# AEGIS runtime artifacts — local trading state, never commit
-data/
+# AEGIS runtime artifacts (the SQLite journal IS committed as live P&L evidence)
 *.sqlite
 *.sqlite3
 *.sqlite3-wal
 *.sqlite3-shm
-*.db
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
 logs/
 static/audio/
 
@@ -232,7 +233,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .qoder/
-data/
 
 # Local-only deliverables and generator scripts
 docs/
