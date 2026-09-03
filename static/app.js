@@ -248,8 +248,11 @@ function showToast(message, type = "success") {
   const container = document.getElementById("toast-container");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
+  const icon = type === 'success'
+    ? '<svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 2"/></svg>'
+    : '<svg class="mini-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v5"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
   toast.innerHTML = `
-    <span>${type === 'success' ? '✅' : '⚠️'}</span>
+    <span>${icon}</span>
     <span>${message}</span>
   `;
   container.appendChild(toast);
